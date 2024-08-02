@@ -1,20 +1,61 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { View, Text } from 'react-native'
+import React from 'react'
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import AllPlaces from './Screens/AllPlaces';
+import AddPlace from './Screens/AddPlace';
+import { Colors } from './constants/Colors';
+import IconeButton from './components/UI/IconeButton';
+import Map from './Screens/Map';
+import PlaceDetails from './Screens/PlaceDetails';
 
-export default function App() {
+const Stack = createNativeStackNavigator();
+
+const App = () => {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+    <NavigationContainer>
+        <Stack.Navigator
+          screenOptions={{
+            headerStyle: { backgroundColor: Colors.primary500 },
+            headerTintColor: Colors.gray700,
+            contentStyle: { backgroundColor: Colors.gray700 },
+          }}
+        >
+          <Stack.Screen
+            name="AllPlaces"
+            component={AllPlaces}
+            options={({ navigation }) => ({
+              title: 'Your Favorite Places',
+              headerRight: ({ tintColor }) => (
+                <IconeButton
+                  icone="add"
+                  size={24}
+                  color={"black"}
+                  onPress={() => navigation.navigate('AddPlace')}
+                />
+              ),
+            })}
+          />
+          <Stack.Screen
+            name="AddPlace"
+            component={AddPlace}
+            options={{
+              title: 'Add a new Place',
+            }}
+          />
+          <Stack.Screen
+            name="Map"
+            component={Map}
+           
+          />
+          <Stack.Screen
+            name="PlaceDetails"
+            component={PlaceDetails}
+           
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App
