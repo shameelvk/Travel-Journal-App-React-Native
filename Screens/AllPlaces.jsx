@@ -19,9 +19,19 @@ const AllPlaces = ({ route }) => {
     }
   }, [isFocused, route, processedParams]);
 
-  return <PlacesList places={loadedPlaces} />;
+  return (
+    <View style={styles.container}>
+      <PlacesList places={loadedPlaces} />
+    </View>
+  );
 };
 
 export default AllPlaces;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: '#f5f5f5', 
+  },
+});

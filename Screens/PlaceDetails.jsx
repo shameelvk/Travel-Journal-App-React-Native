@@ -1,28 +1,33 @@
-import { useEffect, useState } from 'react';
-import { ScrollView, Image, View, Text, StyleSheet } from 'react-native';
-import MapView, { Marker } from 'react-native-maps';
-import { Colors } from '../constants/Colors';
+import { useEffect, useState } from "react";
+import { ScrollView, Image, View, Text, StyleSheet } from "react-native";
+import MapView, { Marker } from "react-native-maps";
+import { Colors } from "../constants/Colors";
 
 function PlaceDetails({ route }) {
-    console.log(route);
   const [location, setLocation] = useState(null);
+
   useEffect(() => {
     const { place } = route.params;
-    setLocation(place?.location); 
+    setLocation(place?.location);
   }, [route.params]);
 
   return (
-    <ScrollView>
-      <View style={styles.locationContainer}>
-        <Text style={{fontSize:20,color:"white"}}>{route.params.place.title}</Text>
+    <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.detailsContainer}>
+        <Text style={styles.title}>
+          {route.params.place.title}
+        </Text>
+        <Image
+          style={styles.image}
+          source={{ uri: route.params.place.imageUri }}
+        />
         <View style={styles.addressContainer}>
-          <Text style={styles.address}>Latitude: {location?.lat}</Text>
-          <Text style={styles.address}>Longitude: {location?.lng}</Text>
+          <Text style={styles.addressLabel}>Latitude:</Text>
+          <Text style={styles.addressValue}>{location?.lat}</Text>
+          <Text style={styles.addressLabel}>Longitude:</Text>
+          <Text style={styles.addressValue}>{location?.lng}</Text>
         </View>
-        <Image style={styles.image} source={{ uri: route.params.place.imageUri }} />
-      
-        
-        {location && ( 
+        {location && (
           <MapView
             style={styles.map}
             initialRegion={{
@@ -33,7 +38,7 @@ function PlaceDetails({ route }) {
             }}
           >
             <Marker
-              title={route.params.place.title || 'Place Location'} 
+              title={route.params.place.title || "Place Location"}
               coordinate={{
                 latitude: location.lat,
                 longitude: location.lng,
@@ -41,7 +46,6 @@ function PlaceDetails({ route }) {
             />
           </MapView>
         )}
-        
       </View>
     </ScrollView>
   );
@@ -50,32 +54,52 @@ function PlaceDetails({ route }) {
 export default PlaceDetails;
 
 const styles = StyleSheet.create({
-  fallback: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+  container: {
+    flexGrow: 1,
+    alignItems: "center",
+    backgroundColor: Colors.primary50,
+  },
+  detailsContainer: {
+    width: "90%",
+    padding: 20,
+    borderRadius: 10,
+    backgroundColor: "white",
+    elevation: 5,
+    marginVertical: 10,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: Colors.primary500,
+    textAlign: "center",
+    marginBottom: 10,
   },
   image: {
-    height: '35%',
-    minHeight: 300,
-    width: '100%',
-  },
-  locationContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: "100%",
+    height: 200,
+    borderRadius: 10,
+    marginBottom: 15,
+    resizeMode: "cover",
   },
   addressContainer: {
-    padding: 20,
+    marginBottom: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.primary100,
+    paddingBottom: 10,
   },
-  address: {
+  addressLabel: {
+    fontWeight: "bold",
     color: Colors.primary500,
-    textAlign: 'center',
-    fontWeight: 'bold',
     fontSize: 16,
   },
+  addressValue: {
+    fontSize: 16,
+    color: Colors.primary700,
+  },
   map: {
-    flex:1,
-    width: '100%',
-    height: 400,
+    width: "100%",
+    height: 300,
+    borderRadius: 10,
+    marginTop: 15,
   },
 });
